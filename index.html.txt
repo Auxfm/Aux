@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مواقيت الصلاة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input, button {
+            font-size: 18px;
+            padding: 10px;
+            margin: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>مواقيت الصلاة</h1>
+    <p>إدخال اسم المدينة للحصول على المواقيت:</p>
+    <input type="text" id="city" placeholder="ادخل اسم المدينة">
+    <button onclick="getPrayerTimes()">احصل على المواقيت</button>
+
+    <h2 id="city-name"></h2>
+    <ul id="prayer-times"></ul>
+
+    <script>
+        async function getPrayerTimes() {
+            const city = document.getElementById('city').value;
+            const apiKey = 'YOUR_API_KEY';  // هنا ضع مفتاح API الخاص بك
+            const url = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=Saudi%20Arabia&method=4`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            document.getElementById('city-name').innerText = `مواقيت الصلاة في ${city}`;
+            const timings = data.data.timings;
+
+            let list = document.getElementById('prayer-times');
+            list.innerHTML = `
+                <li>الفجر: ${timings.Fajr}</li>
+                <li>الظهر: ${timings.Dhuhr}</li>
+                <li>العصر: ${timings.Asr}</li>
+                <li>المغرب: ${timings.Maghrib}</li>
+                <li>العشاء: ${timings.Isha}</li>
+            `;
+        }
+    </script>
+
+</body>
+</html>
